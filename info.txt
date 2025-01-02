@@ -1,0 +1,69 @@
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>
+        <label for="{{ form.title.id_for_label }}">Заголовок:</label>
+        {{ form.title }}
+        <span class="helptext">Введите название недвижимости</span>
+    </p>
+    <p>
+        <label for="{{ form.description.id_for_label }}">Описание:</label>
+        {{ form.description }}
+        <span class="helptext">Опишите недвижимость</span>
+    </p>
+    <p>
+        <label for="{{ form.price_per_night.id_for_label }}">Цена за ночь:</label>
+        {{ form.price_per_night }}
+        <span class="helptext">Укажите цену за одну ночь</span>
+    </p>
+    <p>
+        <label for="{{ form.bedrooms.id_for_label }}">Количество спален:</label>
+        {{ form.bedrooms }}
+        <span class="helptext">Укажите количество спален</span>
+    </p>
+    <p>
+        <label for="{{ form.bathrooms.id_for_label }}">Количество ванных комнат:</label>
+        {{ form.bathrooms }}
+        <span class="helptext">Укажите количество ванных комнат</span>
+    </p>
+    <p>
+        <label for="{{ form.guests.id_for_label }}">Количество гостей:</label>
+        {{ form.guests }}
+        <span class="helptext">Укажите максимальное количество гостей</span>
+    </p>
+    <p>
+        <label for="{{ form.country.id_for_label }}">Страна:</label>
+        {{ form.country }}
+        <span class="helptext">Укажите страну</span>
+    </p>
+    <p>
+        <label for="{{ form.country_code.id_for_label }}">Код страны:</label>
+        {{ form.country_code }}
+        <span class="helptext">Укажите код страны</span>
+    </p>
+    <p>
+        <label for="{{ form.category.id_for_label }}">Категория:</label>
+        {{ form.category }}
+        <span class="helptext">Выберите категорию недвижимости</span>
+    </p>
+    <p>
+        <label for="{{ form.image.id_for_label }}">Изображение:</label>
+        {{ form.image }}
+        <span class="helptext">Загрузите изображение недвижимости</span>
+    </p>
+    <button type="submit">Сохранить</button>
+</form>
+
+from django.urls import path
+from channels.routing import ProtocolTypeRouter, URLRouter
+from .middleware import TokenAuthMiddleware
+from . import consumers
+
+application = ProtocolTypeRouter({
+    "websocket": TokenAuthMiddleware(
+        URLRouter([
+            path("ws/chat/", consumers.ChatConsumer.as_asgi()),
+        ])
+    ),
+})
+
+
